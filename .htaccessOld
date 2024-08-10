@@ -1,0 +1,58 @@
+RewriteEngine On
+#RewriteCond %{HTTPS} !=on
+#RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301] 
+
+
+RewriteBase /
+
+
+
+
+
+
+RewriteCond %{HTTP_USER_AGENT} musobot
+RewriteRule ^.*$ "http\:\/\/www.google\.com\/nobotsallowedrightnow" [R=301,L]
+
+RewriteCond %{HTTP_USER_AGENT} mj12bot
+RewriteRule ^.*$ "http\:\/\/www.google\.com\/nobotsallowedrightnow" [R=301,L]
+
+#caching files
+
+# 1 YEAR
+<FilesMatch "\.(flv|ico|pdf|avi|mov|ppt|doc|mp3|wmv|wav)$">
+Header set Cache-Control "max-age=31536000, public"
+</FilesMatch>
+
+# 70 days
+<FilesMatch "\.(jpg|jpeg|png|gif|swf|svg)$">
+Header set Cache-Control "max-age=6048000, public"
+</FilesMatch>
+
+# 3 HOUR
+#1 Week
+<FilesMatch "\.(txt|xml|js|css)$">
+#Header set Cache-Control "max-age=10800"
+Header set Cache-Control "max-age=604800"
+</FilesMatch>
+
+# NEVER CACHE - notice the extra directives
+<FilesMatch "\.(html|htm|php|cgi|pl)$">
+Header set Cache-Control "max-age=0, private, no-store, no-cache, must-revalidate"
+</FilesMatch>
+
+#load cookies securely
+php_value session.cookie_httponly 1
+php_value session.cookie_secure 1
+
+#prevent directory Listing
+Options -Indexes
+
+# X-XSS-Protection
+<IfModule mod_headers.c>
+	Header set X-XSS-Protection "1; mode=block"
+</IfModule>
+
+# X-Content-Type nosniff
+<IfModule mod_headers.c>
+	Header set X-Content-Type-Options nosniff
+</IfModule>
